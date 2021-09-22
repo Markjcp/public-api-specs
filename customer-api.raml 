@@ -1,0 +1,79 @@
+#%RAML 1.0
+title: Customer API
+version: 1.0
+
+mediaType:
+  - application/json
+
+types:
+  Address:
+    description: A simple Address
+    properties:
+      addressId:
+        type: string
+      street:
+        type: string
+        examples:
+          one: Calle Falsa
+          two: Sarasa
+      number:
+        type: integer
+        examples:
+          one: 1234
+          two: 4321
+  Customer:
+    description: A simple Customer
+    properties:
+      customerId:
+        type: string
+      name:
+        type: string
+        examples:
+          one: Homer Simpson
+          two: Marge Simpson
+
+/customers:
+  get:
+    queryParameters:
+      customersCount:
+        required: false
+        type: integer
+    responses:
+      200:
+        body:
+          type: Customer[]
+  /{customerId}:
+    get:
+      queryParameters:
+        delay:
+          description: This is a delay in milisecods
+          required: false
+          type: integer
+      responses:
+        200:
+          body:
+            application/json:
+              type: Customer
+    /addresses:
+      get:
+        queryParameters:
+          addressesCount:
+            required: false
+            type: integer
+          addressesDelay:
+            required: false
+            type: integer
+            description: delay in miliseconds
+        responses:
+          200:
+            body:
+              type: Address[]
+      /{addressId}:
+        get:
+          responses:
+            200:
+              body:
+                application/json:
+                  type: Address
+
+
