@@ -1,0 +1,79 @@
+#%RAML 1.0
+title: Shipment API
+version: 1.0
+
+mediaType:
+  - application/json
+
+types:
+  ShipmentAddress:
+    description: A simple Address
+    properties:
+      addressId:
+        type: string
+      street:
+        type: string
+        examples:
+          one: Calle Falsa
+          two: Sarasa
+      number:
+        type: integer
+        examples:
+          one: 1234
+          two: 4321
+  ShipmentStatus:
+    type: string
+    enum:
+      - PENDING
+      - SHIPPED
+      - DELIVERED
+  Shipment:
+    description: A simple Shipment
+    discriminator: status
+    properties:
+      shipmentId:
+        type: string
+      status:
+        type: ShipmentStatus
+      deliveryAddressId:
+        type: string
+      orderId:
+        type: string
+      address:
+        type: ShipmentAddress
+  ShipmentPending:
+    type: Shipment
+    description: A pending Shipment
+    discriminatorValue: PENDING
+    properties:
+      warehouseLocation:
+        type: string
+        example: A-16
+  ShipmentShipped:
+    type: Shipment
+    discriminatorValue: SHIPPED
+    description: A shipped Shipment
+    properties:
+      shipDate:
+        type: datetime
+        example: 2016-02-28T16:41:41.090Z
+  ShipmentDelivered:
+    type: Shipment
+    discriminatorValue: DELIVERED
+    description: A delivered Shipment
+    properties:
+      arriveDate:
+        type: datetime
+        example: 2016-02-29T10:10:10.090Z        
+  ShipmentUnion:
+    type: ShipmentPending | ShipmentShipped | ShipmentDelivered
+    
+
+/shipments:
+  get:
+    responses:
+      200:
+        body:
+          type: ShipmentUnion[]
+          example: !include shipments-example.json
+            

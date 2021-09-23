@@ -1,0 +1,65 @@
+#%RAML 1.0
+title: Order API
+version: 1.0
+
+mediaType:
+  - application/json
+
+types:
+  Order:
+    description: An Order
+    properties:
+      orderId:
+        type: string
+      customerId:
+        type: string
+      items:
+        type: Item[]
+  Item:
+    description: An Item
+    properties:
+      itemId:
+        type: integer
+        examples:
+          one: 1
+          two: 2
+      product:
+        type: OrderProduct
+      count:
+        type: integer
+  OrderProduct:
+    description: A Product
+    properties:
+      productId:
+        type: string
+      name:
+        type: string
+
+/orders:
+  get:
+    queryParameters:
+      ordersCount:
+        required: false
+        type: integer
+    responses:
+      200:
+        body:
+          type: Order[]
+  /{orderId}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Order
+    /products:
+      get:
+        queryParameters:
+          productsCounts:
+            required: false
+            type: integer
+        responses:
+          200:
+            body:
+              application/json:
+                type: OrderProduct[]

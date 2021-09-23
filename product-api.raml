@@ -1,0 +1,50 @@
+#%RAML 1.0
+title: Product API
+version: 1.0
+
+mediaType:
+  - application/json
+
+types:
+  Product:
+    description: A Product
+    properties:
+      productId:
+        type: string
+      name:
+        type: string
+  ProductDetail:
+    description: A Product
+    properties:
+      productId:
+        type: string
+      name:
+        type: string
+      brand:
+        type: string
+      description:
+        type: string
+
+/products:
+  get:
+    queryParameters:
+      productsCounts:
+        required: false
+        type: integer
+    responses:
+      200:
+        body:
+          application/json:
+            type: Product[]
+  /{productId}:
+    get:
+      queryParameters:
+        bigContent:
+          required: false
+          type: boolean
+          description: 55 kb in the description
+      responses:
+        200:
+          body:
+            application/json:
+              type: ProductDetail
